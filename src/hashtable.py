@@ -81,7 +81,11 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        return self.storage[index]
+
+        if self.storage[index] == None:
+            print("Error: No LinkedPair with that key.")
+        else:
+            return self.storage[index]
 
     def resize(self):
         '''
