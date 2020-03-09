@@ -53,9 +53,12 @@ class HashTable:
         '''
         if self.retrieve(key) != None:
             print("Error: existing key, value pair in that index.")
+            return
 
         index = self._hash_mod(key)
         self.storage[index] = LinkedPair(key, value)
+
+        print(self.storage)
 
     def remove(self, key):
         '''
@@ -69,6 +72,7 @@ class HashTable:
 
         if self.storage[index] == None:
             print("Error: No LinkedPair with that key.")
+            return
 
         del self.storage[index]
 
@@ -83,7 +87,7 @@ class HashTable:
         index = self._hash_mod(key)
 
         if self.storage[index] == None:
-            print("Error: No LinkedPair with that key.")
+            return None
         else:
             return self.storage[index]
 
@@ -109,6 +113,7 @@ class HashTable:
                 new_storage[index] = LinkedPair(key, value)
 
         self.storage = new_storage
+        print(self.storage)
 
 
 if __name__ == "__main__":
