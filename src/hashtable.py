@@ -1,21 +1,24 @@
 # '''
 # Linked List hash table key/value pair
 # '''
+
+
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
         self.value = value
         self.next = None
 
+
 class HashTable:
     '''
     A hash table that with `capacity` buckets
     that accepts string keys
     '''
+
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
-
 
     def _hash(self, key):
         '''
@@ -25,7 +28,6 @@ class HashTable:
         '''
         return hash(key)
 
-
     def _hash_djb2(self, key):
         '''
         Hash an arbitrary key using DJB2 hash
@@ -34,14 +36,12 @@ class HashTable:
         '''
         pass
 
-
     def _hash_mod(self, key):
         '''
         Take an arbitrary key and return a valid integer index
         within the storage capacity of the hash table.
         '''
         return self._hash(key) % self.capacity
-
 
     def insert(self, key, value):
         '''
@@ -51,9 +51,14 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        if self.retrieve(key) != None:
+            print("Error: existing key, value pair in that index.")
+            return
 
+        index = self._hash_mod(key)
+        self.storage[index] = LinkedPair(key, value)
 
+        print(self.storage)
 
     def remove(self, key):
         '''
@@ -63,8 +68,13 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
 
+        if self.storage[index] == None:
+            print("Error: No LinkedPair with that key.")
+            return
+
+        del self.storage[index]
 
     def retrieve(self, key):
         '''
@@ -74,8 +84,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
 
+        if self.storage[index] == None:
+            return None
+        else:
+            return self.storage[index]
 
     def resize(self):
         '''
@@ -84,8 +98,22 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # make a new storage twice the size
+        new_storage = [None] * (self.capacity * 2)
+        for i in range(self.capacity):
+            # check for a key, value pair to rehash
+            if self.storage[i] != None:
+                key = self.storage[i].key
+                value = self.storage[i].value
 
+                # rehash using the new storage size
+                index = self._hash(key) % (self.capacity * 2)
+
+                # assign the LinkedPair to the an index in the new storage with newly hashed key
+                new_storage[index] = LinkedPair(key, value)
+
+        self.storage = new_storage
+        print(self.storage)
 
 
 if __name__ == "__main__":
@@ -96,6 +124,10 @@ if __name__ == "__main__":
     ht.insert("line_3", "Linked list saves the day!")
 
     print("")
+
+    print(ht.remove("line_1"))
+    print(ht.remove("line_2"))
+    print(ht.remove("line_3"))
 
     # Test storing beyond capacity
     print(ht.retrieve("line_1"))
